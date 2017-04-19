@@ -4,6 +4,6 @@ import click
 
 
 @click.group()
-@click.version_options()
+@click.version_option()
 def diggerplus():
-    """DiggerPlus cmds entry point"""
+    """DiggerPlus commands entry point"""
