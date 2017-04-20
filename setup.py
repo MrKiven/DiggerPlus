@@ -17,7 +17,6 @@ entry_points = {
     "console_scripts": ["diggerplus=diggerplus.bin.cmds:diggerplus"]
 }
 
-
 install_requires = []
 tests_requires = []
 
