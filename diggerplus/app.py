@@ -2,4 +2,21 @@
 
 from flask import Flask
 
-app = Flask(__name__)
+from diggerplus.api import register_all_views, register_all_bps
+
+
+class DiggerPlus(Flask):
+
+    def __init__(self, *args, **kwargs):
+        super(DiggerPlus, self).__init__(*args, **kwargs)
+        self.register_views()
+        self.register_blueprints()
+
+    def register_views(self):
+        register_all_views()
+
+    def register_blueprints(self):
+        register_all_bps(self)
+
+
+app = DiggerPlus(__name__)
