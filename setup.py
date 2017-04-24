@@ -14,7 +14,7 @@ def _get_version():
 
 
 entry_points = {
-    "console_scripts": ["diggerplus=diggerplus.bin.cmds:diggerplus"]
+    "console_scripts": ["dp=diggerplus.bin.cmds:diggerplus"]
 }
 
 install_requires = []
