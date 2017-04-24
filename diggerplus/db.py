@@ -76,7 +76,7 @@ class ModelMeta(DeclarativeMeta):
     def __new__(self, name, bases, attrs):
         cls = DeclarativeMeta.__new__(self, name, bases, attrs)
 
-        # XXX: Here to add hooks
+        # TODO: Here to add hooks
         return cls
 
 
