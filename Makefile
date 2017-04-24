@@ -15,3 +15,6 @@ test: # pylint
 
 git-hooks:
 	ln -sf `pwd`/tools/git-hooks/* .git/hooks/
+
+start:
+	dp start --access-logfile - --error-logfile -

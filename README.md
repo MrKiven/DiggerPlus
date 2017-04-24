@@ -2,7 +2,6 @@
 DiggerPlus Service - A Creative Community ~
 
 
-# Dev environment
+# Dev Environment
 
-`dp start [--access-logfile - --error-logfile -]` to start server, and
-it will output log to stdout/stderr
+`make start` to start server.
