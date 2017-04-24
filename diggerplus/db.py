@@ -103,6 +103,13 @@ class DBManager(object):
         self.session_map[name] = session
         return session
 
+    def get_session(self, name):
+        try:
+            return self.session_map[name]
+        except KeyError:
+            raise KeyError(
+                "`%s` session not created, check `DB_SETTINGS`" % name)
+
     @classmethod
     def _make_session(cls, db, config):
         urls = config['urls']
