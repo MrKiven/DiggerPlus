@@ -11,9 +11,9 @@ def diggerplus():
 
 @diggerplus.command(
     context_settings={
-            "ignore_unknown_options": True,
-            "allow_extra_args": True
-        },
+        "ignore_unknown_options": True,
+        "allow_extra_args": True
+    },
     add_help_option=False)
 def start():
     from diggerplus.runner import start

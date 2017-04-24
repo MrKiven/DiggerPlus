@@ -10,5 +10,8 @@ pep8:
 pylint: pep8
 	bash tools/scripts/ci.sh
 
+test: # pylint
+	py.test tests -sv
+
 git-hooks:
 	ln -sf `pwd`/tools/git-hooks/* .git/hooks/
