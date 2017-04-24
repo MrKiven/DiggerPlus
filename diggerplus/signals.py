@@ -24,3 +24,17 @@ class SignalWSGIWrapper(object):
 
 
 wsgi_signal_wrapper = SignalWSGIWrapper()
+
+
+def register_receivers():
+    """Should register before load app"""
+    wsgi_signal_wrapper.called.connect(on_single_called)
+    wsgi_signal_wrapper.called_exc.connect(on_single_called_exc)
+
+
+def on_single_called(ctx):
+    pass
+
+
+def on_single_called_exc(ctx):
+    pass
