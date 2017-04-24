@@ -8,6 +8,7 @@ import settings
 
 from sqlalchemy import create_engine as sqlalchemy_create_engine
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +70,18 @@ class RecycleField(object):
         if instance is not None:
             return int(random.uniform(0.75, 1) * instance._origin_recycle)
         raise AttributeError
+
+
+class ModelMeta(DeclarativeMeta):
+    def __new__(self, name, bases, attrs):
+        cls = DeclarativeMeta.__new__(self, name, bases, attrs)
+
+        # TODO: Here to add hooks
+        return cls
+
+
+def mode_base():
+    return declarative_base(metaclass=ModelMeta)
 
 
 class DBManager(object):
