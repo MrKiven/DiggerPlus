@@ -13,7 +13,26 @@ logger = logging.getLogger(__name__)
 
 
 class RoutingSession(Session):
-    pass
+
+    def __init__(self, engines, *args, **kwargs):
+        self.engines = engines
+        self._name = None
+        self.slave_engines = [e for role, e in engines.items()
+                              if role != 'master']
+        if not self.slave_engines:
+            self.slave_engines = engines
+
+    def get_bind(self, mapper=None, clause=None):
+        if self._name:
+            return self.engines[self._name]
+        elif self._flushing:
+            return self.engines['master']
+        else:
+            return random.choice[self.slave_engines]
+
+    def using_bind(self, name):
+        self._name = name
+        return self
 
 
 def patch_engine(engine):
