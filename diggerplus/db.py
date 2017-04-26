@@ -14,10 +14,11 @@ logger = logging.getLogger(__name__)
 
 
 class RoutingSession(Session):
+    _name = None
 
     def __init__(self, engines, *args, **kwargs):
+        super(RoutingSession, self).__init__(*args, **kwargs)
         self.engines = engines
-        self._name = None
         self.slave_engines = [e for role, e in engines.items()
                               if role != 'master']
         if not self.slave_engines:
