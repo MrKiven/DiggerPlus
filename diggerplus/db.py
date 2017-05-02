@@ -30,7 +30,7 @@ class RoutingSession(Session):
         elif self._flushing:
             return self.engines['master']
         else:
-            return random.choice[self.slave_engines]
+            return random.choice(self.slave_engines)
 
     def using_bind(self, name):
         self._name = name
@@ -51,7 +51,8 @@ def make_session(engines, info=None):
             class_=RoutingSession,
             expire_on_commit=False,
             engines=engines,
-            info=info or {"name": uuid.uuid4().hex}))
+            info=info or {"name": uuid.uuid4().hex})
+    )
     return session
 
 
@@ -86,7 +87,6 @@ def mode_base():
 
 
 class DBManager(object):
-
     def __init__(self):
         self.session_map = {}
 
@@ -121,7 +121,6 @@ class DBManager(object):
             "max_overflow", settings.DEFAULT_MAX_OVERFLOW)
         pool_recycle = config.get(
             "pool_recycle", settings.DEFAULT_POOL_RECYCLE)
-
         engines = {
             role: cls.create_engine(dsn,
                                     pool_size=pool_size,
@@ -130,9 +129,9 @@ class DBManager(object):
                                     execution_options={'role': role})
             for role, dsn in urls.iteritems()
         }
-        return make_session(engines, info={"name", db})
+        return make_session(engines, info={"name": db})
 
-    def close_session(self, should_close_connection=False):
+    def close_sessions(self, should_close_connection=False):
         dbsessions = self.session_map
         for dbsession in dbsessions.itervalues():
             if should_close_connection:
