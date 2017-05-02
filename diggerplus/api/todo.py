@@ -4,6 +4,8 @@ from flask import Blueprint
 
 from .base import status_OK, MethodView
 from ..models.todo import TODOModel
+from ..exc import NotFoundException
+from ..consts import NOT_FOUND_MESSAGE
 
 
 bp = Blueprint('todos', __name__, url_prefix='/api')
@@ -18,4 +20,5 @@ class TODOS(MethodView):
         todo = TODOModel.get(id)
         if todo:
             return status_OK(todo.to_dict())
-        return status_OK("NOT FOUND")
+        raise NotFoundException(
+            NOT_FOUND_MESSAGE.format(self.__class__.__name__, id))
