@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 
-class DiggerPlusException(Exception):
+class BaseDiggerPlusException(Exception):
     """Api exception handler class"""
     status_code = 500
 
     def __init__(self, msg, status_code=None, payload=None):
-        super(DiggerPlusException, self).__init__()
+        super(BaseDiggerPlusException, self).__init__(msg)
         self.msg = msg
         if status_code:
             self.status_code = status_code
@@ -17,6 +17,10 @@ class DiggerPlusException(Exception):
         rv['message'] = self.msg
         rv['status_code'] = self.status_code
         return rv
+
+
+class DiggerPlusException(BaseDiggerPlusException):
+    status_code = 501
 
 
 class NotFoundException(DiggerPlusException):
