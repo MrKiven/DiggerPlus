@@ -58,14 +58,14 @@ def with_error_response(logger):
             try:
                 return func(*args, **kwargs)
             except HTTPException as exc:
-                logger.exception("Tolerated error:")
-                return exc
+                logger.exception("Tolerated error: %s", exc)
+                raise
             except SQLAlchemyError as exc:
-                logger.exception("SQLAlchemy error:")
-                return exc
+                logger.exception("SQLAlchemy error: %s", exc)
+                raise
             except Exception as exc:
-                logger.exception("Unknown error:")
-                return exc
+                logger.exception("Unknown error: %s", exc)
+                raise
         return _wrapper
     return _deco
 
