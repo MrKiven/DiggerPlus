@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from flask import Blueprint
 
 from diggerplus import __version__
-from .base import status_OK, DPMethodView
+from .base import status_OK, MethodView
+
+
+logger = logging.getLogger(__name__)
 
 bp = Blueprint('ping', __name__, url_prefix='/api')
 
 
-class Ping(DPMethodView):
+class Ping(MethodView):
     blueprint = bp
     url_rule = '/ping'
-    methods = ['GET']
+    logger = logger
 
     def get(self):
         return status_OK({'version': __version__})

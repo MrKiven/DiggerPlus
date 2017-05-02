@@ -8,12 +8,13 @@
   All api for diggerplus backend.
 """
 
-from . import ping
+import os
+
+from diggerplus.utils import load_module_attrs
+
+_current_path = os.path.dirname(os.path.abspath(__file__))
 
 
-def register_all_views():
-    ping.Ping.register()
-
-
-def register_all_bps(app):
-    app.register_blueprint(ping.bp)
+def register_all_bps(app, _pkg=__name__):
+    bps = load_module_attrs('bp', _current_path, _pkg)
+    [app.register_blueprint(bp) for bp in bps]
