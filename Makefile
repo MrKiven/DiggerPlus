@@ -18,3 +18,7 @@ git-hooks:
 
 start:
 	dp start --access-logfile - --error-logfile -
+
+tag:
+	@t=`python setup.py --version`;\
+	echo v$$t; git tag v$$t
