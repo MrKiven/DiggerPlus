@@ -17,16 +17,19 @@ bp = Blueprint('todos', __name__, url_prefix='/api')
 
 class TODOS(MethodView):
     blueprint = bp
-    url_rule = '/todos/<title>'
+    url_rules = ['/todos/<title>', '/todos']
     logger = logger
 
-    def get(self, title):
+    def get(self, title=None):
+        if title is None:
+            todos = TODOModel.get_all()
+            return status_OK([todo.to_dict() for todo in todos])
         todo = TODOModel.get_by_title(title)
         if todo:
             return status_OK(todo.to_dict())
         raise NotFoundException("TODO: {!r} not found!".format(title))
 
-    def post(self, title):
+    def post(self, title=None):
         todo = TODOModel.get_by_title(title)
         if todo:
             raise ExistedException(

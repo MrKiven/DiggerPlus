@@ -42,12 +42,15 @@ status_ResetContent = status(205)
 
 
 def mv_register(app_or_bp, cls):
+    # support multi routing in one view!
     endpoint = getattr(cls, 'endpoint', cls.__name__)
-    app_or_bp.add_url_rule(
-        rule=cls.url_rule,
-        view_func=cls.as_view(endpoint),
-        methods=cls.methods
-    )
+    view_func = cls.as_view(endpoint)
+    for url_rule in cls.url_rules:
+        app_or_bp.add_url_rule(
+            rule=url_rule,
+            view_func=view_func,
+            methods=cls.methods
+        )
     return cls
 
 
