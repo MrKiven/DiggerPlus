@@ -25,3 +25,11 @@ class DiggerPlusException(BaseDiggerPlusException):
 
 class NotFoundException(DiggerPlusException):
     status_code = 404
+
+
+class ExistedException(DiggerPlusException):
+    status_code = 409
+
+
+class EmptyFieldsException(DiggerPlusException):
+    status_code = 410

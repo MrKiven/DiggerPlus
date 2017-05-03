@@ -6,9 +6,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from werkzeug.local import Local
 from werkzeug.exceptions import HTTPException
-from flask import current_app, request
-from flask import json
+from flask import current_app, request, json
 from flask.views import View
+
+from ..exc import EmptyFieldsException
 
 
 req = Local()
@@ -42,12 +43,15 @@ status_ResetContent = status(205)
 
 
 def mv_register(app_or_bp, cls):
+    # support multi routing in one view!
     endpoint = getattr(cls, 'endpoint', cls.__name__)
-    app_or_bp.add_url_rule(
-        rule=cls.url_rule,
-        view_func=cls.as_view(endpoint),
-        methods=cls.methods
-    )
+    view_func = cls.as_view(endpoint)
+    for url_rule in cls.url_rules:
+        app_or_bp.add_url_rule(
+            rule=url_rule,
+            view_func=view_func,
+            methods=cls.methods
+        )
     return cls
 
 
@@ -108,7 +112,25 @@ class ViewMeta(type):
         return rv
 
 
-class MethodView(View):
+class ParserMixin(object):
+    """Parser mixin for parser parameters via `request`, also support
+    validation fields.
+    """
+
+    @staticmethod
+    def get_key(key, required=False):
+        data = request.get_json(force=True, silent=True)
+        if not data:
+            data = request.values.to_dict()
+        if not data:
+            if required:
+                raise EmptyFieldsException(
+                    "Field {!r} cannot be empty".format(key))
+            return None
+        return data[key]
+
+
+class MethodView(ParserMixin, View):
     __metaclass__ = ViewMeta
 
     def dispatch_request(self, *args, **kwargs):

@@ -15,7 +15,7 @@ bp = Blueprint('ping', __name__, url_prefix='/api')
 
 class Ping(MethodView):
     blueprint = bp
-    url_rule = '/ping'
+    url_rules = ['/ping']
     logger = logger
 
     def get(self):
