@@ -2,7 +2,7 @@
 
 import logging
 
-from flask import Blueprint, request
+from flask import Blueprint
 
 from .base import status_OK, status_Created, status_ResetContent, MethodView
 from ..models.todo import TODOModel
@@ -30,6 +30,7 @@ class TODOS(MethodView):
         raise NotFoundException("TODO: {!r} not found!".format(title))
 
     def post(self, title=None):
+        title = title or self.get_key('title', required=True)
         todo = TODOModel.get_by_title(title)
         if todo:
             raise ExistedException(
@@ -37,12 +38,11 @@ class TODOS(MethodView):
         TODOModel.add(title=title)
         return status_Created()
 
-    def put(self, title):
-        data = request.get_json(force=True, silent=True)
-        if data is None:
-            data = request.values.to_dict()
+    def put(self, title=None):
+        title = title or self.get_key('title', required=True)
+        is_done = self.get_key('is_done', required=True)
         todo = TODOModel.get_by_title(title)
         if todo:
-            todo.update(**data)
+            todo.update(title=title, is_done=is_done)
             return status_ResetContent()
         raise NotFoundException("TODO: {!r} not found!".format(title))

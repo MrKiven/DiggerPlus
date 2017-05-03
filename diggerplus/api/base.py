@@ -6,9 +6,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from werkzeug.local import Local
 from werkzeug.exceptions import HTTPException
-from flask import current_app, request
-from flask import json
+from flask import current_app, request, json
 from flask.views import View
+
+from ..exc import EmptyFieldsException
 
 
 req = Local()
@@ -111,7 +112,25 @@ class ViewMeta(type):
         return rv
 
 
-class MethodView(View):
+class ParserMixin(object):
+    """Parser mixin for parser parameters via `request`, also support
+    validation fields.
+    """
+
+    @staticmethod
+    def get_key(key, required=False):
+        data = request.get_json(force=True, silent=True)
+        if not data:
+            data = request.values.to_dict()
+        if not data:
+            if required:
+                raise EmptyFieldsException(
+                    "Field {!r} cannot be empty".format(key))
+            return None
+        return data[key]
+
+
+class MethodView(ParserMixin, View):
     __metaclass__ = ViewMeta
 
     def dispatch_request(self, *args, **kwargs):
