@@ -25,3 +25,7 @@ class DiggerPlusException(BaseDiggerPlusException):
 
 class NotFoundException(DiggerPlusException):
     status_code = 404
+
+
+class ExistedException(DiggerPlusException):
+    status_code = 409

@@ -9,6 +9,7 @@ import settings
 from sqlalchemy import create_engine as sqlalchemy_create_engine
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
+from sqlalchemy.exc import SQLAlchemyError
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,28 @@ class RoutingSession(Session):
                               if role != 'master']
         if not self.slave_engines:
             self.slave_engines = engines
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """contextmanager
+
+            with DBSession() as session:
+                session.add(instance)
+
+        """
+        try:
+            if exc_val is None:
+                self.flush()
+                self.commit()
+            elif isinstance(exc_val, SQLAlchemyError):
+                self.rollback()
+        except SQLAlchemyError:
+            self.rollback()
+            raise
+        finally:
+            self.close()
 
     def get_bind(self, mapper=None, clause=None):
         if self._name:
