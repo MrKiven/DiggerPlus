@@ -149,6 +149,7 @@ class Model(ModelBase):
 
     @declared_attr
     def created_at(cls):
+        # `sqlalchemy.sql.func.now()` `sqlalchemy.sql.func.utc_timestamp()`
         return Column('created_at', DateTime, nullable=False, index=True,
                       default=datetime.datetime.now())
 
