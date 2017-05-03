@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import math
+import datetime
 
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy import (
@@ -9,7 +10,6 @@ from sqlalchemy import (
     BigInteger,
     DateTime,
 )
-from sqlalchemy.sql import func
 
 from diggerplus.db import mode_base, db_manager
 
@@ -150,13 +150,13 @@ class Model(ModelBase):
     @declared_attr
     def created_at(cls):
         return Column('created_at', DateTime, nullable=False, index=True,
-                      default=func.utc_timestamp())
+                      default=datetime.datetime.now())
 
     @declared_attr
     def updated_at(cls):
         return Column('updated_at', DateTime, nullable=False, index=True,
-                      default=func.utc_timestamp(),
-                      onupdate=func.utc_timestamp())
+                      default=datetime.datetime.now(),
+                      onupdate=datetime.datetime.now())
 
     @classmethod
     def count(cls):
