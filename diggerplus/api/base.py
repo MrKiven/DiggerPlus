@@ -123,11 +123,14 @@ class ParserMixin(object):
         if not data:
             data = request.values.to_dict()
         if not data:
+            raise EmptyFieldsException("Empty fields!")
+        try:
+            return data[key]
+        except KeyError:
             if required:
                 raise EmptyFieldsException(
                     "Field {!r} cannot be empty".format(key))
             return None
-        return data[key]
 
 
 class MethodView(ParserMixin, View):

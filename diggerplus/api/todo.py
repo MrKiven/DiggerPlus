@@ -4,7 +4,12 @@ import logging
 
 from flask import Blueprint
 
-from .base import status_OK, status_Created, status_ResetContent, MethodView
+from .base import (
+    status_OK,
+    status_Created,
+    status_ResetContent,
+    MethodView,
+)
 from ..models.todo import TODOModel
 from ..exc import NotFoundException, ExistedException
 from ..consts import ALREADY_EXISTS_MESSSAGE
