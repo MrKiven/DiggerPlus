@@ -192,3 +192,11 @@ class Model(ModelBase):
     def delete(self):
         with DBSession() as session:
             session.delete(self)
+
+    def to_dict(self, shields=None):
+        if shields is None:
+            shields = []
+        return {
+            c.name: getattr(self, c.name, None)
+            for c in self.__table__.columns if c.name not in shields
+        }
